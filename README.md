@@ -1,0 +1,2 @@
+# promptsLib
+useful prompts repository
