@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+	<head><meta charset="utf-8">
+  
+		<title>Prompts library</title>
+		<meta name="robots" content="none">
+		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, width=device-width, viewport-fit=cover" />
+		<meta http-equiv="refresh" content="180;url=#">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+ 
+		<style>
+			body{padding:1%}
+			h1 {text-align:center; margin:1% auto 3%}
+			table{padding-top:20px}
+			tr:nth-child(odd) {background: #f9f9f9 !important}
+			tr:nth-child(even), thead tr:first-child {background: #fff!important}
+			#footer {font-size:90%;text-align:center; margin:30px auto 0;border-top:1px dotted #444}
+			input{width:450px; padding:2px 5px; font-size:105%;color:steelblue}
+			select{width:60px; height:2.5em}
+		</style>
+		
+		<!-- jQuery -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	</head>
+	
+	<body>
+
+		<div class="container-fluid main">
+		
+			<div class="hero-unit" style="padding:0 !important">
+			
+				<h1>Prompts library</h1>
+
+
+				 <table id="datatbl" class="datatbl">
+					<thead>
+						<tr>
+							<th class="head">Lang</th>
+							<th class="head">Prompt</th>
+							<th class="head">Keywords</th>							
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>en</td>
+							<td>Refine and enhance this text for a more precise and effective ChatGPT user prompt: " "</td>
+							<td>optimize</td>
+						</tr>
+						<tr>
+							<td>en</td>
+							<td>Below, you'll find the structure of an SQL table. I will be requesting assistance with crafting SQL queries in my upcoming prompts:</td>
+							<td>SQL</td>
+						</tr>						
+						<tr>
+							<td>en</td>
+							<td>Synthesized this information in a well-structured Markdown mindmap enclosed in a code block to improve both readability and compatibility with Markdown viewer applications.</td>
+							<td>markdown</td>
+						</tr>
+					</tbody>
+				</table>
+
+
+
+			
+				<script type="text/javascript" charset="utf8">
+
+					$(document).ready(function() {
+						$('#datatbl').DataTable({
+							"responsive": false,
+							"lengthMenu": [[10, 20, -1],[10, 20, "Tot"]],
+							"bJQueryUI": false,
+							"bLengthChange": true,
+							"bInfo":true, 
+							"bPaginate": true,
+							"bFilter": true,
+							"order": [[0, "asc"]],
+							"columnDefs": [
+							 {
+								"targets": [ 0 ], //tid column
+								"visible": true,
+								"searchable": true
+							 }
+							],
+							
+							/*
+							
+							// Catalan localization (https://datatables.net/plug-ins/i18n/Catalan) 	
+							"language": {
+								"sProcessing": "Processant...",
+								"sLengthMenu": "_MENU_",
+								"sZeroRecords": "No s'han trobat registres.",
+								"sInfo": "_START_ a _END_ de<b> _TOTAL_ registres</b>",
+								"sInfoEmpty": "Mostrant de 0 a 0 de 0 registres",
+								"sInfoFiltered": "(filtrat de _MAX_ total registres)",
+								"sInfoPostFix": "",
+								"sSearch": "Filtrar:",
+								"sUrl": "",
+								"oPaginate": {
+									"sFirst": "Primer",
+									"sPrevious": "Anterior",
+									"sNext": "Següent",
+									"sLast": "Últim"
+								},
+							}
+							
+							*/	
+							
+						});
+					});
+				</script>
+	
+	
+	
+	
+			</div> <!-- /hero-unit -->					
+		</div> <!-- /container-fluid main -->		
+		
+		<div id="footer">
+			<p class="text-center">
+				<span>2023 - EME</span><br />
+				<span><a target="ext" href="https://github.com/montaneva/promptsLib/prompTable.html" title="" >See this file on Github</a></span>
+			</p>
+		</div><!-- /footer-->		
+				
+
+			
+	</body>
+
+<!-- DataTables -->
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.css" />
+<script>
+$(document).ready(function () {
+  $('input').focus();
+});
+</script>
+</html>
