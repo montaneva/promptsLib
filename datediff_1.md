@@ -82,90 +82,71 @@ After running this query, your table should be updated with the calculated date 
 
 
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
-User
+Evolution
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
-Apply this query to `datediffTestTbl` provided dummy rows.
-Then select all rows and print the new result as a SQL console 
 
-
-= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
-ChatGPT
-= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
-Certainly! First, apply the update query to calculate and populate the datediff column based on the date differences between consecutive rows.
-Then, select all rows to view the updated result. Here are the queries:
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --  
--- Update query
-UPDATE datediffTestTbl t1
-JOIN datediffTestTbl t2 ON t1.id = t2.id + 1
-SET t1.datediff = DATEDIFF(t1.eventdate, t2.eventdate);
-
--- Select all rows after the update
-SELECT * FROM datediffTestTbl;
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --  
-When you run these queries in your MySQL console, the datediff column will be updated, and you should see a result similar to the following:
-+----+---------------------+----------+
-| id | eventdate           | datediff |
-+----+---------------------+----------+
-| 1  | 2023-01-01 12:00:00 | NULL     |
-| 2  | 2023-01-02 12:00:00 | 1        |
-| 3  | 2023-01-04 12:00:00 | 2        |
-| 4  | 2023-01-10 12:00:00 | 6        |
-| 5  | 2023-02-09 12:00:00 | 30       |
-+----+---------------------+----------+
-
-
-
-
-
-
-= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
-User
-= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
-Here's a modified version of 'datediffTestTbl' along with its corresponding inserted dataset:
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --  
 CREATE TABLE `datediffTestTbl` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `firstname` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   `eventdate` datetime DEFAULT NULL,
   `datediff` int(3) DEFAULT NULL,
+  `specialday` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT 'NO',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `datediffTestTbl` (`id`,`eventdate`,`datediff`) VALUES
-('1', 'John', '2023-01-01 12:00:00', NULL),
-('2', 'Eva', '2023-01-02 12:00:00', NULL),
-('3', 'John', '2023-01-04 12:00:00', NULL),
-('4', 'Eva', '2023-01-10 12:00:00', NULL),
-('5', 'John', '2023-02-09 12:00:00', NULL);
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --  
-Adapt the update query to calculate the date differences in days between consecutive rows based on the firstname column
+INSERT INTO `datediffTestTbl` (`firstname`, `eventdate`, `datediff`, `specialday`) VALUES
+('John', '2023-01-01 12:00:00', NULL, 'NO'),
+('Eva', '2023-01-02 12:00:00', NULL, 'NO'),
+('John', '2023-01-04 12:00:00', NULL, 'NO'),
+('Eva', '2023-01-10 12:00:00', NULL, 'NO'),
+('John', '2023-11-12 12:00:00', NULL, 'NO');
 
++----+-----------+---------------------+----------+------------+
+| id | firstname | eventdate           | datediff | specialday |
++----+-----------+---------------------+----------+------------+
+|  6 | John      | 2023-01-01 12:00:00 |     NULL | NO         |
+|  7 | Eva       | 2023-01-02 12:00:00 |     NULL | NO         |
+|  8 | John      | 2023-01-04 12:00:00 |     NULL | NO         |
+|  9 | Eva       | 2023-01-10 12:00:00 |     NULL | NO         |
+| 10 | John      | 2023-11-12 12:00:00 |     NULL | NO         |
++----+-----------+---------------------+----------+------------+
 
-= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
-ChatGPT
-= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
-Certainly! If you want to calculate the date differences in days between consecutive rows based on the firstname column, you can adapt the update query like this:
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --  
 -- Update query for calculating date differences by firstname
 UPDATE datediffTestTbl t1
-JOIN datediffTestTbl t2 ON t1.firstname = t2.firstname AND t1.id = t2.id + 1
-SET t1.datediff = DATEDIFF(t1.eventdate, t2.eventdate);
-
--- Select all rows after the update
-SELECT * FROM datediffTestTbl;
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --  
-The result should look something like this:
-+----+-----------+---------------------+----------+
-| id | firstname | eventdate           | datediff |
-+----+-----------+---------------------+----------+
-| 1  | John      | 2023-01-01 12:00:00 | NULL     |
-| 2  | Eva       | 2023-01-02 12:00:00 | NULL     |
-| 3  | John      | 2023-01-04 12:00:00 | 3        |
-| 4  | Eva       | 2023-01-10 12:00:00 | 8        |
-| 5  | John      | 2023-02-09 12:00:00 | 36       |
-+----+-----------+---------------------+----------+
+JOIN (
+    SELECT 
+        t2.firstname,
+        t2.eventdate,
+        MAX(t3.eventdate) AS prev_eventdate
+    FROM 
+        datediffTestTbl t2
+    LEFT JOIN 
+        datediffTestTbl t3 ON t2.firstname = t3.firstname AND t2.eventdate > t3.eventdate
+    GROUP BY 
+        t2.firstname, t2.eventdate
+) AS subquery ON t1.firstname = subquery.firstname AND t1.eventdate = subquery.eventdate
+SET t1.datediff = DATEDIFF(t1.eventdate, subquery.prev_eventdate);
 
 
+-- Update special days (Sunday, saturday, public holidays, etc)
+UPDATE datedifftesttbl
+SET specialDay = 'Yes'
+WHERE DAYOFWEEK(eventdate) IN (1, 7)  -- Sunday is 1, Saturday is 7
+    OR eventdate IN (
+        STR_TO_DATE(CONCAT(YEAR(CURDATE()), '-01-01 12:00:00'), '%Y-%m-%d %H:%i:%s'),
+        STR_TO_DATE(CONCAT(YEAR(CURDATE()), '-07-04 12:00:00'), '%Y-%m-%d %H:%i:%s'),
+        STR_TO_DATE(CONCAT(YEAR(CURDATE()), '-12-25 12:00:00'), '%Y-%m-%d %H:%i:%s')
+        -- 2 alternative syntaxes :
+        -- OR (MONTH(eventdate) = 1 AND DAYOFWEEK(eventdate) = 1) -- New Year's Day
+        -- OR eventdate IN ('2023-01-01', '2023-07-04', '2023-12-25'); 
+    );
 
-
-Short URL: https://tinyurl.com/yc6etfe2
++----+-----------+---------------------+----------+------------+
+| id | firstname | eventdate           | datediff | specialday |
++----+-----------+---------------------+----------+------------+
+|  6 | John      | 2023-01-01 12:00:00 |     NULL | Yes        |
+|  7 | Eva       | 2023-01-02 12:00:00 |     NULL | NO         |
+|  8 | John      | 2023-01-04 12:00:00 |        3 | NO         |
+|  9 | Eva       | 2023-01-10 12:00:00 |        8 | NO         |
+| 10 | John      | 2023-11-12 12:00:00 |      312 | Yes        |
++----+-----------+---------------------+----------+------------+
